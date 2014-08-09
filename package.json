@@ -1,6 +1,6 @@
 {
   "name": "leven",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Measure the difference between two strings using the fastest JS implementation of the Levenshtein distance algorithm",
   "license": "MIT",
   "repository": "sindresorhus/leven",
