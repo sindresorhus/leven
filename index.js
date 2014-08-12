@@ -12,11 +12,11 @@ module.exports = function (a, b) {
 	var bLen = b.length;
 
 	if (aLen === 0) {
-		return b.length;
+		return bLen;
 	}
 
 	if (bLen === 0) {
-		return a.length;
+		return aLen;
 	}
 
 	var bCharCode;
