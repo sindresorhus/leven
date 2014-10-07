@@ -50,11 +50,11 @@ suite('leven', function () {
 		run(levdist);
 	});
 
-	bench('natural', function () {
-		run(natural);
-	});
-
 	bench('levenshtein', function () {
 		run(levenshtein);
+	});
+
+	bench('natural', function () {
+		run(natural);
 	});
 });

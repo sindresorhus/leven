@@ -27,14 +27,14 @@ leven('cat', 'cow');
 $ npm run bench
 ```
 ```
-         203,025 op/s » leven
-          46,748 op/s » levenshtein-edit-distance
-          42,073 op/s » fast-levenshtein
-          29,508 op/s » levenshtein-component
-          24,183 op/s » ld
-          18,065 op/s » levdist
-          15,022 op/s » natural
-          11,764 op/s » levenshtein
+         230,113 op/s » leven
+         201,026 op/s » levenshtein-edit-distance
+          40,454 op/s » fast-levenshtein
+          28,664 op/s » levenshtein-component
+          22,952 op/s » ld
+          16,882 op/s » levdist
+          11,180 op/s » levenshtein
+           9,624 op/s » natural
 ```
 
 

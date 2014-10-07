@@ -2,6 +2,7 @@
 //'use strict';
 
 var arr = [];
+var charCodeCache = [];
 
 module.exports = function (a, b) {
 	if (a === b) {
@@ -27,6 +28,7 @@ module.exports = function (a, b) {
 	var j = 0;
 
 	while (i < aLen) {
+		charCodeCache[i] = a.charCodeAt(i);
 		arr[i] = ++i;
 	}
 
@@ -36,7 +38,7 @@ module.exports = function (a, b) {
 		ret = j;
 
 		for (i = 0; i < aLen; i++) {
-			tmp2 = bCharCode === a.charCodeAt(i) ? tmp : tmp + 1;
+			tmp2 = bCharCode === charCodeCache[i] ? tmp : tmp + 1;
 			tmp = arr[i];
 			ret = arr[i] = tmp > ret ? tmp2 > ret ? ret + 1 : tmp2 : tmp2 > tmp ? tmp + 1 : tmp2;
 		}

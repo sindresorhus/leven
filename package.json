@@ -41,7 +41,7 @@
     "comparison"
   ],
   "devDependencies": {
-    "ava": "0.0.3",
+    "ava": "0.0.4",
     "fast-levenshtein": "^1.0.3",
     "ld": "^0.1.0",
     "levdist": "^1.0.0",
