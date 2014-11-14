@@ -4,7 +4,7 @@
 var arr = [];
 var charCodeCache = [];
 
-module.exports = function (a, b) {
+module.exports = function (a, b, asPercent) {
 	if (a === b) {
 		return 0;
 	}
@@ -44,5 +44,5 @@ module.exports = function (a, b) {
 		}
 	}
 
-	return ret;
+	return asPercent ? 1 - (ret / Math.max(aLen, bLen)) : ret;
 };
