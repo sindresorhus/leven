@@ -6,7 +6,7 @@
 
 ## Install
 
-```sh
+```
 $ npm install --save leven
 ```
 
@@ -23,7 +23,7 @@ leven('cat', 'cow');
 
 ## Benchmark
 
-```sh
+```
 $ npm run bench
 ```
 ```
@@ -40,15 +40,15 @@ $ npm run bench
 
 ## CLI
 
-```sh
+```
 $ npm install --global leven
 ```
 
-```sh
+```
 $ leven --help
 
   Example
-    leven cat cow
+    $ leven cat cow
     2
 ```
 

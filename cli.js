@@ -10,7 +10,7 @@ function help() {
 		'  ' + pkg.description,
 		'',
 		'  Example',
-		'    leven cat cow',
+		'    $ leven cat cow',
 		'    2'
 	].join('\n'));
 }

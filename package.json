@@ -4,13 +4,11 @@
   "description": "Measure the difference between two strings using the fastest JS implementation of the Levenshtein distance algorithm",
   "license": "MIT",
   "repository": "sindresorhus/leven",
-  "bin": {
-    "leven": "cli.js"
-  },
+  "bin": "cli.js",
   "author": {
     "name": "Sindre Sorhus",
     "email": "sindresorhus@gmail.com",
-    "url": "http://sindresorhus.com"
+    "url": "sindresorhus.com"
   },
   "engines": {
     "node": ">=0.10.0"
@@ -37,8 +35,13 @@
     "fast",
     "fuzzy",
     "similar",
+    "similarity",
     "compare",
-    "comparison"
+    "comparison",
+    "edit",
+    "text",
+    "match",
+    "matching"
   ],
   "devDependencies": {
     "ava": "0.0.4",
