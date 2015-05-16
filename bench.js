@@ -42,19 +42,19 @@ suite('leven', function () {
 		run(levenshteinComponent);
 	});
 
-	bench('ld', function () {
-		run(ld);
-	});
-
 	bench('levdist', function () {
 		run(levdist);
 	});
 
-	bench('levenshtein', function () {
-		run(levenshtein);
+	bench('ld', function () {
+		run(ld);
 	});
 
 	bench('natural', function () {
 		run(natural);
+	});
+
+	bench('levenshtein', function () {
+		run(levenshtein);
 	});
 });
