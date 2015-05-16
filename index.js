@@ -1,6 +1,4 @@
-// intentionally commented out as it makes it slower...
-//'use strict';
-
+'use strict';
 var arr = [];
 var charCodeCache = [];
 
