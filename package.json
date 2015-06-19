@@ -43,6 +43,9 @@
     "match",
     "matching"
   ],
+  "dependencies": {
+    "meow": "^3.3.0"
+  },
   "devDependencies": {
     "ava": "0.0.4",
     "fast-levenshtein": "^1.0.3",

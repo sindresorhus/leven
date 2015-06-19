@@ -1,28 +1,19 @@
 #!/usr/bin/env node
 'use strict';
-var pkg = require('./package.json');
+var meow = require('meow');
 var leven = require('./');
-var argv = process.argv.slice(2);
 
-function help() {
-	console.log([
-		'',
-		'  ' + pkg.description,
-		'',
-		'  Example',
-		'    $ leven cat cow',
-		'    2'
-	].join('\n'));
+var cli = meow({
+	help: [
+		'Example',
+		'  $ leven cat cow',
+		'  2'
+	]
+});
+
+if (cli.input.length < 2) {
+	console.error('Expected two strings');
+	process.exit(1);
 }
 
-if (argv.length !== 2 || argv.indexOf('--help') !== -1) {
-	help();
-	return;
-}
-
-if (argv.indexOf('--version') !== -1) {
-	console.log(pkg.version);
-	return;
-}
-
-console.log(leven(argv[0], argv[1]));
+console.log(leven(cli.input[0], cli.input[1]));
