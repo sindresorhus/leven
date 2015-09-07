@@ -26,6 +26,7 @@ leven('cat', 'cow');
 ```
 $ npm run bench
 ```
+
 ```
          343,757 op/s » leven
          264,625 op/s » levenshtein-edit-distance
@@ -38,19 +39,9 @@ $ npm run bench
 ```
 
 
-## CLI
+## Related
 
-```
-$ npm install --global leven
-```
-
-```
-$ leven --help
-
-  Example
-    $ leven cat cow
-    2
-```
+- [leven-cli](https://github.com/sindresorhus/leven-cli) - CLI for this module
 
 
 ## License
