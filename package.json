@@ -14,7 +14,7 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "node test.js",
+    "test": "ava",
     "bench": "matcha bench.js"
   },
   "files": [
@@ -47,7 +47,7 @@
     "meow": "^3.3.0"
   },
   "devDependencies": {
-    "ava": "0.0.4",
+    "ava": "*",
     "fast-levenshtein": "^1.0.3",
     "ld": "^0.1.0",
     "levdist": "^1.0.0",
