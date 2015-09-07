@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 'use strict';
 var arr = [];
 var charCodeCache = [];

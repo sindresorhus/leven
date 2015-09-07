@@ -1,3 +1,4 @@
+/* globals bench suite */
 'use strict';
 var leven = require('./');
 var levenshteinEditDistance = require('levenshtein-edit-distance');

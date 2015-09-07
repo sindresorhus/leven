@@ -14,7 +14,7 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "ava",
+    "test": "xo && ava",
     "bench": "matcha bench.js"
   },
   "files": [
@@ -50,11 +50,12 @@
     "ava": "*",
     "fast-levenshtein": "^1.0.3",
     "ld": "^0.1.0",
-    "levdist": "^1.0.0",
+    "levdist": "^2.0.0",
     "levenshtein": "^1.0.4",
     "levenshtein-component": "0.0.1",
-    "levenshtein-edit-distance": "^0.1.0",
+    "levenshtein-edit-distance": "^1.0.0",
     "matcha": "^0.6.0",
-    "natural": "^0.2.1"
+    "natural": "^0.2.1",
+    "xo": "*"
   }
 }
