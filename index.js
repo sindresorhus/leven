@@ -1,6 +1,5 @@
 /* eslint-disable no-nested-ternary */
 'use strict';
-var arr = [];
 var charCodeCache = [];
 
 module.exports = function (a, b) {
@@ -27,8 +26,7 @@ module.exports = function (a, b) {
 	var j = 0;
 
 	while (i < aLen) {
-		charCodeCache[i] = a.charCodeAt(i);
-		arr[i] = ++i;
+		charCodeCache[i] = a.charCodeAt(i++);
 	}
 
 	while (j < bLen) {
@@ -38,8 +36,8 @@ module.exports = function (a, b) {
 
 		for (i = 0; i < aLen; i++) {
 			tmp2 = bCharCode === charCodeCache[i] ? tmp : tmp + 1;
-			tmp = arr[i];
-			ret = arr[i] = tmp > ret ? tmp2 > ret ? ret + 1 : tmp2 : tmp2 > tmp ? tmp + 1 : tmp2;
+			tmp = i + 1;
+			ret = tmp > ret ? tmp2 > ret ? ret + 1 : tmp2 : tmp2 > tmp ? tmp + 1 : tmp2;
 		}
 	}
 
