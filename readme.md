@@ -1,6 +1,6 @@
 # leven [![Build Status](https://travis-ci.org/sindresorhus/leven.svg?branch=master)](https://travis-ci.org/sindresorhus/leven)
 
-> Measure the difference between two strings  
+> Measure the difference between two strings<br>
 > The fastest JS implementation of the [Levenshtein distance](http://en.wikipedia.org/wiki/Levenshtein_distance) algorithm
 
 
@@ -14,7 +14,7 @@ $ npm install --save leven
 ## Usage
 
 ```js
-var leven = require('leven');
+const leven = require('leven');
 
 leven('cat', 'cow');
 //=> 2
@@ -28,14 +28,14 @@ $ npm run bench
 ```
 
 ```
-         343,757 op/s » leven
-         264,625 op/s » levenshtein-edit-distance
-          49,981 op/s » fast-levenshtein
-          25,496 op/s » levenshtein-component
-          18,240 op/s » levdist
-          17,554 op/s » ld
-          12,633 op/s » natural
-           9,960 op/s » levenshtein
+       337,624 op/s » leven
+       285,154 op/s » levenshtein-edit-distance
+       164,496 op/s » fast-levenshtein
+        64,034 op/s » levenshtein-component
+        22,013 op/s » levdist
+        24,400 op/s » ld
+        20,803 op/s » natural
+        13,223 op/s » levenshtein
 ```
 
 
@@ -46,4 +46,4 @@ $ npm run bench
 
 ## License
 
-MIT © [Sindre Sorhus](http://sindresorhus.com)
+MIT © [Sindre Sorhus](https://sindresorhus.com)

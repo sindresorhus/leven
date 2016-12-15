@@ -1,6 +1,5 @@
 /* globals bench suite */
 'use strict';
-var leven = require('./');
 var levenshteinEditDistance = require('levenshtein-edit-distance');
 var fastLevenshtein = require('fast-levenshtein').get;
 var levenshteinComponent = require('levenshtein-component');
@@ -8,6 +7,7 @@ var ld = require('ld').computeDistance;
 var levdist = require('levdist');
 var natural = require('natural').LevenshteinDistance;
 var levenshtein = require('levenshtein');
+var leven = require('./');
 
 function run(fn) {
 	fn('a', 'b');

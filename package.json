@@ -40,15 +40,15 @@
     "matching"
   ],
   "devDependencies": {
-    "ava": "*",
-    "fast-levenshtein": "^1.0.3",
+    "ava": "^0.17.0",
+    "fast-levenshtein": "^2.0.5",
     "ld": "^0.1.0",
     "levdist": "^2.0.0",
     "levenshtein": "^1.0.4",
     "levenshtein-component": "0.0.1",
-    "levenshtein-edit-distance": "^1.0.0",
-    "matcha": "^0.6.0",
-    "natural": "^0.2.1",
-    "xo": "*"
+    "levenshtein-edit-distance": "^2.0.0",
+    "matcha": "^0.7.0",
+    "natural": "^0.4.0",
+    "xo": "^0.16.0"
   }
 }
