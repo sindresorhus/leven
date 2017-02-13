@@ -8,6 +8,13 @@ module.exports = function (a, b) {
 		return 0;
 	}
 
+	var swap = a;
+
+	if (a.length > b.length) {
+		a = b;
+		b = swap;
+	}
+
 	var aLen = a.length;
 	var bLen = b.length;
 
@@ -17,6 +24,15 @@ module.exports = function (a, b) {
 
 	if (bLen === 0) {
 		return aLen;
+	}
+
+	while (aLen > 0 && (a.charCodeAt(~-aLen) === b.charCodeAt(~-bLen))) {
+		aLen--;
+		bLen--;
+	}
+
+	if (aLen === 0) {
+		return bLen;
 	}
 
 	var bCharCode;
