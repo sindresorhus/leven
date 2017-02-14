@@ -10,6 +10,8 @@ module.exports = function (a, b) {
 
 	var swap = a;
 
+	// Swapping the strings if a is longer than b so we know which one is the
+	// shortest & which one is the longest.
 	if (a.length > b.length) {
 		a = b;
 		b = swap;
@@ -26,6 +28,10 @@ module.exports = function (a, b) {
 		return aLen;
 	}
 
+	// Performing suffix trimming:
+	// We can linearly drop suffix common to both strings since they
+	// don't increase distance at all.
+	// Note: `~-` is the bitwise way to perform a `- 1` operation.
 	while (aLen > 0 && (a.charCodeAt(~-aLen) === b.charCodeAt(~-bLen))) {
 		aLen--;
 		bLen--;
