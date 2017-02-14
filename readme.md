@@ -28,14 +28,15 @@ $ npm run bench
 ```
 
 ```
-       337,624 op/s » leven
-       285,154 op/s » levenshtein-edit-distance
-       164,496 op/s » fast-levenshtein
-        64,034 op/s » levenshtein-component
-        22,013 op/s » levdist
-        24,400 op/s » ld
-        20,803 op/s » natural
-        13,223 op/s » levenshtein
+         401,487 op/s » leven
+         371,707 op/s » talisman
+         264,191 op/s » levenshtein-edit-distance
+         152,923 op/s » fast-levenshtein
+          57,267 op/s » levenshtein-component
+          19,915 op/s » levdist
+          21,802 op/s » ld
+          18,079 op/s » natural
+          11,761 op/s » levenshtein
 ```
 
 

@@ -32,6 +32,10 @@ suite('leven', function () {
 		run(leven);
 	});
 
+	bench('talisman', function () {
+		run(talisman);
+	});
+
 	bench('levenshtein-edit-distance', function () {
 		run(levenshteinEditDistance);
 	});
@@ -58,9 +62,5 @@ suite('leven', function () {
 
 	bench('levenshtein', function () {
 		run(levenshtein);
-	});
-
-	bench('talisman', function () {
-		run(talisman);
 	});
 });
