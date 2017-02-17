@@ -49,7 +49,7 @@
     "levenshtein-edit-distance": "^2.0.0",
     "matcha": "^0.7.0",
     "natural": "^0.4.0",
-    "talisman": "^0.16.0",
+    "talisman": "^0.18.0",
     "xo": "^0.16.0"
   }
 }
