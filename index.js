@@ -41,6 +41,22 @@ module.exports = function (a, b) {
 		return bLen;
 	}
 
+	// Performing prefix trimming
+	// We can linearly drop prefix common to both strings since they
+	// don't increase distance at all
+	var start = 0;
+
+	while (start < aLen && (a.charCodeAt(start) === b.charCodeAt(start))) {
+		start++;
+	}
+
+	aLen -= start;
+	bLen -= start;
+
+	if (aLen === 0) {
+		return bLen;
+	}
+
 	var bCharCode;
 	var ret;
 	var tmp;
@@ -49,17 +65,17 @@ module.exports = function (a, b) {
 	var j = 0;
 
 	while (i < aLen) {
-		charCodeCache[i] = a.charCodeAt(i);
+		charCodeCache[start + i] = a.charCodeAt(start + i);
 		arr[i] = ++i;
 	}
 
 	while (j < bLen) {
-		bCharCode = b.charCodeAt(j);
+		bCharCode = b.charCodeAt(start + j);
 		tmp = j++;
 		ret = j;
 
 		for (i = 0; i < aLen; i++) {
-			tmp2 = bCharCode === charCodeCache[i] ? tmp : tmp + 1;
+			tmp2 = bCharCode === charCodeCache[start + i] ? tmp : tmp + 1;
 			tmp = arr[i];
 			ret = arr[i] = tmp > ret ? tmp2 > ret ? ret + 1 : tmp2 : tmp2 > tmp ? tmp + 1 : tmp2;
 		}
