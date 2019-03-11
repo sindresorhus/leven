@@ -1,14 +1,14 @@
 /* globals bench suite */
 'use strict';
-var levenshteinEditDistance = require('levenshtein-edit-distance');
-var fastLevenshtein = require('fast-levenshtein').get;
-var levenshteinComponent = require('levenshtein-component');
-var ld = require('ld').computeDistance;
-var levdist = require('levdist');
-var natural = require('natural').LevenshteinDistance;
-var levenshtein = require('levenshtein');
-var talisman = require('talisman/metrics/distance/levenshtein');
-var leven = require('./');
+const levenshteinEditDistance = require('levenshtein-edit-distance');
+const fastLevenshtein = require('fast-levenshtein').get;
+const levenshteinComponent = require('levenshtein-component');
+const ld = require('ld').computeDistance;
+const levdist = require('levdist');
+const natural = require('natural').LevenshteinDistance;
+const levenshtein = require('levenshtein');
+const talisman = require('talisman/metrics/distance/levenshtein');
+const leven = require('.');
 
 function run(fn) {
 	fn('a', 'b');
@@ -27,40 +27,40 @@ function run(fn) {
 	fn('因為我是中國人所以我會說中文', '因為我是英國人所以我會說英文');
 }
 
-suite('leven', function () {
-	bench('leven', function () {
+suite('leven', () => {
+	bench('leven', () => {
 		run(leven);
 	});
 
-	bench('talisman', function () {
+	bench('talisman', () => {
 		run(talisman);
 	});
 
-	bench('levenshtein-edit-distance', function () {
+	bench('levenshtein-edit-distance', () => {
 		run(levenshteinEditDistance);
 	});
 
-	bench('fast-levenshtein', function () {
+	bench('fast-levenshtein', () => {
 		run(fastLevenshtein);
 	});
 
-	bench('levenshtein-component', function () {
+	bench('levenshtein-component', () => {
 		run(levenshteinComponent);
 	});
 
-	bench('levdist', function () {
-		run(levdist);
-	});
-
-	bench('ld', function () {
+	bench('ld', () => {
 		run(ld);
 	});
 
-	bench('natural', function () {
-		run(natural);
+	bench('levenshtein', () => {
+		run(levenshtein);
 	});
 
-	bench('levenshtein', function () {
-		run(levenshtein);
+	bench('levdist', () => {
+		run(levdist);
+	});
+
+	bench('natural', () => {
+		run(natural);
 	});
 });
