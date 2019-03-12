@@ -1,5 +1,5 @@
 'use strict';
-const arr = [];
+const array = [];
 const charCodeCache = [];
 
 const leven = (left, right) => {
@@ -53,7 +53,7 @@ const leven = (left, right) => {
 
 	while (i < leftLength) {
 		charCodeCache[i] = left.charCodeAt(start + i);
-		arr[i] = ++i;
+		array[i] = ++i;
 	}
 
 	while (j < rightLength) {
@@ -63,9 +63,9 @@ const leven = (left, right) => {
 
 		for (i = 0; i < leftLength; i++) {
 			temp2 = bCharCode === charCodeCache[i] ? temp : temp + 1;
-			temp = arr[i];
+			temp = array[i];
 			// eslint-disable-next-line no-multi-assign
-			result = arr[i] = temp > result ? temp2 > result ? result + 1 : temp2 : temp2 > temp ? temp + 1 : temp2;
+			result = array[i] = temp > result ? temp2 > result ? result + 1 : temp2 : temp2 > temp ? temp + 1 : temp2;
 		}
 	}
 
