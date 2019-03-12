@@ -1,73 +1,76 @@
-/* eslint-disable no-nested-ternary */
 'use strict';
-var arr = [];
-var charCodeCache = [];
+const arr = [];
+const charCodeCache = [];
 
-module.exports = function (a, b) {
-	if (a === b) {
+const leven = (left, right) => {
+	if (left === right) {
 		return 0;
 	}
 
-	var swap = a;
+	const swap = left;
 
 	// Swapping the strings if `a` is longer than `b` so we know which one is the
 	// shortest & which one is the longest
-	if (a.length > b.length) {
-		a = b;
-		b = swap;
+	if (left.length > right.length) {
+		left = right;
+		right = swap;
 	}
 
-	var aLen = a.length;
-	var bLen = b.length;
+	let leftLength = left.length;
+	let rightLength = right.length;
 
 	// Performing suffix trimming:
 	// We can linearly drop suffix common to both strings since they
 	// don't increase distance at all
 	// Note: `~-` is the bitwise way to perform a `- 1` operation
-	while (aLen > 0 && (a.charCodeAt(~-aLen) === b.charCodeAt(~-bLen))) {
-		aLen--;
-		bLen--;
+	while (leftLength > 0 && (left.charCodeAt(~-leftLength) === right.charCodeAt(~-rightLength))) {
+		leftLength--;
+		rightLength--;
 	}
 
 	// Performing prefix trimming
 	// We can linearly drop prefix common to both strings since they
 	// don't increase distance at all
-	var start = 0;
+	let start = 0;
 
-	while (start < aLen && (a.charCodeAt(start) === b.charCodeAt(start))) {
+	while (start < leftLength && (left.charCodeAt(start) === right.charCodeAt(start))) {
 		start++;
 	}
 
-	aLen -= start;
-	bLen -= start;
+	leftLength -= start;
+	rightLength -= start;
 
-	if (aLen === 0) {
-		return bLen;
+	if (leftLength === 0) {
+		return rightLength;
 	}
 
-	var bCharCode;
-	var ret;
-	var tmp;
-	var tmp2;
-	var i = 0;
-	var j = 0;
+	let bCharCode;
+	let result;
+	let temp;
+	let temp2;
+	let i = 0;
+	let j = 0;
 
-	while (i < aLen) {
-		charCodeCache[i] = a.charCodeAt(start + i);
+	while (i < leftLength) {
+		charCodeCache[i] = left.charCodeAt(start + i);
 		arr[i] = ++i;
 	}
 
-	while (j < bLen) {
-		bCharCode = b.charCodeAt(start + j);
-		tmp = j++;
-		ret = j;
+	while (j < rightLength) {
+		bCharCode = right.charCodeAt(start + j);
+		temp = j++;
+		result = j;
 
-		for (i = 0; i < aLen; i++) {
-			tmp2 = bCharCode === charCodeCache[i] ? tmp : tmp + 1;
-			tmp = arr[i];
-			ret = arr[i] = tmp > ret ? tmp2 > ret ? ret + 1 : tmp2 : tmp2 > tmp ? tmp + 1 : tmp2;
+		for (i = 0; i < leftLength; i++) {
+			temp2 = bCharCode === charCodeCache[i] ? temp : temp + 1;
+			temp = arr[i];
+			// eslint-disable-next-line no-multi-assign
+			result = arr[i] = temp > result ? temp2 > result ? result + 1 : temp2 : temp2 > temp ? temp + 1 : temp2;
 		}
 	}
 
-	return ret;
+	return result;
 };
+
+module.exports = leven;
+module.exports.default = leven;
