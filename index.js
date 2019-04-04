@@ -73,4 +73,5 @@ const leven = (left, right) => {
 };
 
 module.exports = leven;
+// TODO: Remove this for the next major release
 module.exports.default = leven;
