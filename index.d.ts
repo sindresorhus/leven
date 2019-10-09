@@ -10,7 +10,7 @@ declare const leven: {
 	//=> 2
 	```
 	*/
-	(left: string, right: string): number;
+	(left: string, right: string, options?: any): number;
 
 	// TODO: Remove this for the next major release, refactor the whole definition to:
 	// declare function leven(left: string, right: string): number;

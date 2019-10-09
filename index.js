@@ -2,7 +2,7 @@
 const array = [];
 const charCodeCache = [];
 
-const leven = (left, right) => {
+const leven = (left, right, options) => {
 	if (left === right) {
 		return 0;
 	}
@@ -18,6 +18,14 @@ const leven = (left, right) => {
 
 	let leftLength = left.length;
 	let rightLength = right.length;
+
+	// Short circuit if the difference in lengths is greater than or equal
+	// to the specified maximumDistance
+	if (options && options.maximumDistance) {
+		if (Math.abs(leftLength - rightLength) >= options.maximumDistance) {
+			return options.maximumDistance;
+		}
+	}
 
 	// Performing suffix trimming:
 	// We can linearly drop suffix common to both strings since they

@@ -16,4 +16,7 @@ test('main', t => {
 	t.is(leven('levenshtein', 'frankenstein'), 6);
 	t.is(leven('distance', 'difference'), 5);
 	t.is(leven('因為我是中國人所以我會說中文', '因為我是英國人所以我會說英文'), 2);
+	t.is(leven('123', '12345678', {fakeValue: 1}), 5);
+	t.is(leven('123', '12345678', {maximumDistance: 3}), 3);
+	t.is(leven('123', '12345678', {maximumDistance: 6}), 5);
 });
