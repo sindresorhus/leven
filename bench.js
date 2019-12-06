@@ -26,12 +26,12 @@ const strings = [
 	['distance', 'difference'],
 	['I know not all that may be coming, but be it what it will, I\'ll go to it laughing', 'short'],
 	['Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.', 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.']
-]
+];
 
 function run(fn, ...args) {
 	strings.forEach(([left, right]) => {
-		fn(left, right, ...args)
-	})
+		fn(left, right, ...args);
+	});
 }
 
 suite('leven', () => {
@@ -40,11 +40,11 @@ suite('leven', () => {
 	});
 
 	bench('leven with maxDistance:5', () => {
-		run(leven, {maxDistance: 5})
+		run(leven, {maxDistance: 5});
 	});
 
 	bench('leven with maxDistance:10', () => {
-		run(leven, {maxDistance: 10})
+		run(leven, {maxDistance: 10});
 	});
 
 	bench('talisman', () => {
