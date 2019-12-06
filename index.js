@@ -19,11 +19,11 @@ const leven = (left, right, options) => {
 	let leftLength = left.length;
 	let rightLength = right.length;
 
-	// Short circuit if the difference in lengths is greater than or equal
-	// to the specified maximumDistance
-	if (options && options.maximumDistance) {
-		if (Math.abs(leftLength - rightLength) >= options.maximumDistance) {
-			return options.maximumDistance;
+	// Short circuit if the difference in lengths is greater than or equal to the
+	// specified maxDistance
+	if (options && options.maxDistance) {
+		if (Math.abs(leftLength - rightLength) >= options.maxDistance) {
+			return options.maxDistance;
 		}
 	}
 
