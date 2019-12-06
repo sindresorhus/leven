@@ -7,6 +7,7 @@ const leven = (left, right, options) => {
 		return 0;
 	}
 
+	const maxDistance = (options && options.maxDistance) || Number.POSITIVE_INFINITY;
 	const swap = left;
 
 	// Swapping the strings if `a` is longer than `b` so we know which one is the
@@ -21,10 +22,8 @@ const leven = (left, right, options) => {
 
 	// Short circuit if the difference in lengths is greater than or equal to the
 	// specified maxDistance
-	if (options && options.maxDistance) {
-		if (Math.abs(leftLength - rightLength) >= options.maxDistance) {
-			return options.maxDistance;
-		}
+	if (Math.abs(leftLength - rightLength) >= maxDistance) {
+		return maxDistance;
 	}
 
 	// Performing suffix trimming:
@@ -77,7 +76,7 @@ const leven = (left, right, options) => {
 		}
 	}
 
-	return result;
+	return result >= maxDistance ? maxDistance : result;
 };
 
 module.exports = leven;

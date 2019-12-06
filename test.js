@@ -16,7 +16,10 @@ test('main', t => {
 	t.is(leven('levenshtein', 'frankenstein'), 6);
 	t.is(leven('distance', 'difference'), 5);
 	t.is(leven('因為我是中國人所以我會說中文', '因為我是英國人所以我會說英文'), 2);
-	t.is(leven('123', '12345678', {fakeValue: 1}), 5);
-	t.is(leven('123', '12345678', {maxDistance: 3}), 3);
-	t.is(leven('123', '12345678', {maxDistance: 6}), 5);
+});
+
+test('options.maxDistance', t => {
+	t.is(leven('hippopotamus', 'fox', {maxDistance: 7}), 7);
+	t.is(leven('extraterrestrial', 'catch', {maxDistance: 5}), 5);
+	t.is(leven('attitude', 'medicine', {maxDistance: 4}), 4);
 });
