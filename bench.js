@@ -10,27 +10,41 @@ const levenshtein = require('levenshtein');
 const talisman = require('talisman/metrics/distance/levenshtein');
 const leven = require('.');
 
-function run(fn) {
-	fn('a', 'b');
-	fn('ab', 'ac');
-	fn('ac', 'bc');
-	fn('abc', 'axc');
-	fn('kitten', 'sitting');
-	fn('xabxcdxxefxgx', '1ab2cd34ef5g6');
-	fn('cat', 'cow');
-	fn('xabxcdxxefxgx', 'abcdefg');
-	fn('javawasneat', 'scalaisgreat');
-	fn('example', 'samples');
-	fn('sturgeon', 'urgently');
-	fn('levenshtein', 'frankenstein');
-	fn('distance', 'difference');
-	fn('因為我是中國人所以我會說中文', '因為我是英國人所以我會說英文');
-	fn('Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.', 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.');
+const strings = [
+	['a', 'b'],
+	['ab', 'ac'],
+	['ac', 'bc'],
+	['abc', 'axc'],
+	['kitten', 'sitting'],
+	['xabxcdxxefxgx', '1ab2cd34ef5g6'],
+	['cat', 'cow'],
+	['xabxcdxxefxgx', 'abcdefg'],
+	['javawasneat', 'scalaisgreat'],
+	['example', 'samples'],
+	['sturgeon', 'urgently'],
+	['levenshtein', 'frankenstein'],
+	['distance', 'difference'],
+	['I know not all that may be coming, but be it what it will, I\'ll go to it laughing', 'short'],
+	['Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.', 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.']
+]
+
+function run(fn, ...args) {
+	strings.forEach(([left, right]) => {
+		fn(left, right, ...args)
+	})
 }
 
 suite('leven', () => {
 	bench('leven', () => {
 		run(leven);
+	});
+
+	bench('leven with maxDistance:5', () => {
+		run(leven, {maxDistance: 5})
+	});
+
+	bench('leven with maxDistance:10', () => {
+		run(leven, {maxDistance: 10})
 	});
 
 	bench('talisman', () => {
