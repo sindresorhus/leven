@@ -28,9 +28,24 @@ const strings = [
 	['Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.', 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.']
 ];
 
-function run(fn, ...args) {
+/**
+ *
+ * @param {Function} fn The function to run.
+ * @param {Array|undefined} preArgs An array of arguments to apply before the
+ * `left` and `right` arguments when calling `fn`.
+ * @param {Array|undefined} postArgs An array of elements to apply after the
+ * `left` and `right` arguments when calling `fn`.
+ */
+function run(fn, preArgs, postArgs) {
+	const hasPreArgs = Array.isArray(preArgs)
+	const hasPostArgs = Array.isArray(postArgs)
+
 	strings.forEach(([left, right]) => {
-		fn(left, right, ...args);
+		let args = []
+		if (hasPreArgs) args = args.concat(...preArgs);
+		args = args.concat(left, right);
+		if (hasPostArgs) args = args.concat(...postArgs);
+		fn(...args)
 	});
 }
 
@@ -39,16 +54,28 @@ suite('leven', () => {
 		run(leven);
 	});
 
-	bench('leven with maxDistance:5', () => {
-		run(leven, {maxDistance: 5});
+	bench('leven maxDistance:5', () => {
+		run(leven, undefined, [{maxDistance: 5}]);
 	});
 
-	bench('leven with maxDistance:10', () => {
-		run(leven, {maxDistance: 10});
+	bench('leven maxDistance:10', () => {
+		run(leven, undefined, [{maxDistance: 10}]);
 	});
 
 	bench('talisman', () => {
 		run(talisman);
+	});
+
+	bench('talisman.limited', () => {
+		run(talisman.limited, [Infinity]);
+	});
+
+	bench('talisman.limited maxDistance:5', () => {
+		run(talisman.limited, [5]);
+	});
+
+	bench('talisman.limited maxDistance:10', () => {
+		run(talisman.limited, [10]);
 	});
 
 	bench('levenshtein-edit-distance', () => {
@@ -79,3 +106,4 @@ suite('leven', () => {
 		run(natural);
 	});
 });
+
