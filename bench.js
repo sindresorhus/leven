@@ -37,15 +37,21 @@ const strings = [
  * `left` and `right` arguments when calling `fn`.
  */
 function run(fn, preArgs, postArgs) {
-	const hasPreArgs = Array.isArray(preArgs)
-	const hasPostArgs = Array.isArray(postArgs)
+	const hasPreArgs = Array.isArray(preArgs);
+	const hasPostArgs = Array.isArray(postArgs);
 
 	strings.forEach(([left, right]) => {
-		let args = []
-		if (hasPreArgs) args = args.concat(...preArgs);
+		let args = [];
+		if (hasPreArgs) {
+			args = args.concat(...preArgs);
+		}
+
 		args = args.concat(left, right);
-		if (hasPostArgs) args = args.concat(...postArgs);
-		fn(...args)
+		if (hasPostArgs) {
+			args = args.concat(...postArgs);
+		}
+
+		fn(...args);
 	});
 }
 
