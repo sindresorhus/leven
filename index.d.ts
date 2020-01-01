@@ -1,12 +1,9 @@
 interface Options {
 	/**
-	When `maxDistance` is supplied, leven will return the value of `maxDistance`
-	if the calculated Levenshtein distance is greater than `maxDistance`.
+	When true, Leven will return the value of `maxDistance` if the calculated Levenshtein distance is greater than `maxDistance`.
 
-	Additionally, leven will determine if calculating the Levenshtein distance is
-	necessary by comparing the difference in string length between `left` and
-	`right` to `maxDistance`, which may lead to an increase of performance in your
-	application.
+	Additionally, Leven will determine if calculating the Levenshtein distance is necessary by comparing the difference in string length between `left` and
+	`right` to `maxDistance`, which may lead to an increase of performance in your app.
 
 	@example
 	```
