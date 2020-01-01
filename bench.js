@@ -29,13 +29,10 @@ const strings = [
 ];
 
 /**
- *
- * @param {Function} fn The function to run.
- * @param {Array|undefined} preArgs An array of arguments to apply before the
- * `left` and `right` arguments when calling `fn`.
- * @param {Array|undefined} postArgs An array of elements to apply after the
- * `left` and `right` arguments when calling `fn`.
- */
+@param {Function} fn - The function to run.
+@param {Array | undefined} preArgs - An array of arguments to apply before the `left` and `right` arguments when calling `fn`.
+@param {Array | undefined} postArgs - An array of elements to apply after the `left` and `right` arguments when calling `fn`.
+*/
 function run(fn, preArgs, postArgs) {
 	const hasPreArgs = Array.isArray(preArgs);
 	const hasPostArgs = Array.isArray(postArgs);
@@ -112,4 +109,3 @@ suite('leven', () => {
 		run(natural);
 	});
 });
-
