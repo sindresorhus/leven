@@ -231,7 +231,7 @@ const sentences = [
 	'The beach was crowded with snow leopards.',
 	'Your girlfriend bought your favorite cookie crisp cereal but forgot to get milk.',
 	'I love eating toasted cheese and tuna sandwiches.',
-	'Wisdom is easily acqui                       be called a beach if there was no sand.',
+	'Check back tomorrow; I will see if the book has arrived.',
 	'He was the type of guy who liked Christmas lights on his house in the middle of July.',
 	'As the years pass by, we all know owners look more and more like their dogs.',
 	'The shark-infested South Pine channel was the only way in or out.',
