@@ -28,6 +28,7 @@ $ npm run bench
 ```
 
 ```
+                      50 words, length max=15 min=5 avr=8.4
          476,628 op/s » fastest-levenshtein
          427,831 op/s » fast-levenshtein
          171,965 op/s » js-levenshtein
