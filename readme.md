@@ -1,4 +1,4 @@
-# leven [![Build Status](https://travis-ci.org/sindresorhus/leven.svg?branch=master)](https://travis-ci.org/sindresorhus/leven)
+# leven
 
 > Measure the difference between two strings<br>
 > One of the fastest JS implementations of the [Levenshtein distance](https://en.wikipedia.org/wiki/Levenshtein_distance) algorithm
