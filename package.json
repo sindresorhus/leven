@@ -1,13 +1,14 @@
 {
 	"name": "leven",
 	"version": "3.1.0",
-	"description": "Measure the difference between two strings using the fastest JS implementation of the Levenshtein distance algorithm",
+	"description": "Measure the difference between two strings using the Levenshtein distance algorithm",
 	"license": "MIT",
 	"repository": "sindresorhus/leven",
+	"funding": "https://github.com/sponsors/sindresorhus",
 	"author": {
 		"name": "Sindre Sorhus",
 		"email": "sindresorhus@gmail.com",
-		"url": "sindresorhus.com"
+		"url": "https://sindresorhus.com"
 	},
 	"engines": {
 		"node": ">=6"
@@ -25,7 +26,6 @@
 		"levenshtein",
 		"distance",
 		"algorithm",
-		"algo",
 		"string",
 		"difference",
 		"diff",
