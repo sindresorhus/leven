@@ -11,7 +11,7 @@ $ npm install leven
 ## Usage
 
 ```js
-const leven = require('leven');
+import leven from 'leven';
 
 leven('cat', 'cow');
 //=> 2

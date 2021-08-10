@@ -1,4 +1,4 @@
 import {expectType} from 'tsd';
-import leven = require('.');
+import leven from './index.js';
 
 expectType<number>(leven('kitten', 'sitting'));

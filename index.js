@@ -1,31 +1,30 @@
-'use strict';
 const array = [];
-const charCodeCache = [];
+const characterCodeCache = [];
 
-const leven = (left, right) => {
-	if (left === right) {
+export default function leven(first, second) {
+	if (first === second) {
 		return 0;
 	}
 
-	const swap = left;
+	const swap = first;
 
 	// Swapping the strings if `a` is longer than `b` so we know which one is the
 	// shortest & which one is the longest
-	if (left.length > right.length) {
-		left = right;
-		right = swap;
+	if (first.length > second.length) {
+		first = second;
+		second = swap;
 	}
 
-	let leftLength = left.length;
-	let rightLength = right.length;
+	let firstLength = first.length;
+	let secondLength = second.length;
 
 	// Performing suffix trimming:
 	// We can linearly drop suffix common to both strings since they
 	// don't increase distance at all
 	// Note: `~-` is the bitwise way to perform a `- 1` operation
-	while (leftLength > 0 && (left.charCodeAt(~-leftLength) === right.charCodeAt(~-rightLength))) {
-		leftLength--;
-		rightLength--;
+	while (firstLength > 0 && (first.charCodeAt(~-firstLength) === second.charCodeAt(~-secondLength))) {
+		firstLength--;
+		secondLength--;
 	}
 
 	// Performing prefix trimming
@@ -33,45 +32,41 @@ const leven = (left, right) => {
 	// don't increase distance at all
 	let start = 0;
 
-	while (start < leftLength && (left.charCodeAt(start) === right.charCodeAt(start))) {
+	while (start < firstLength && (first.charCodeAt(start) === second.charCodeAt(start))) {
 		start++;
 	}
 
-	leftLength -= start;
-	rightLength -= start;
+	firstLength -= start;
+	secondLength -= start;
 
-	if (leftLength === 0) {
-		return rightLength;
+	if (firstLength === 0) {
+		return secondLength;
 	}
 
-	let bCharCode;
+	let bCharacterCode;
 	let result;
-	let temp;
-	let temp2;
-	let i = 0;
-	let j = 0;
+	let temporary;
+	let temporary2;
+	let index = 0;
+	let index2 = 0;
 
-	while (i < leftLength) {
-		charCodeCache[i] = left.charCodeAt(start + i);
-		array[i] = ++i;
+	while (index < firstLength) {
+		characterCodeCache[index] = first.charCodeAt(start + index);
+		array[index] = ++index;
 	}
 
-	while (j < rightLength) {
-		bCharCode = right.charCodeAt(start + j);
-		temp = j++;
-		result = j;
+	while (index2 < secondLength) {
+		bCharacterCode = second.charCodeAt(start + index2);
+		temporary = index2++;
+		result = index2;
 
-		for (i = 0; i < leftLength; i++) {
-			temp2 = bCharCode === charCodeCache[i] ? temp : temp + 1;
-			temp = array[i];
+		for (index = 0; index < firstLength; index++) {
+			temporary2 = bCharacterCode === characterCodeCache[index] ? temporary : temporary + 1;
+			temporary = array[index];
 			// eslint-disable-next-line no-multi-assign
-			result = array[i] = temp > result ? temp2 > result ? result + 1 : temp2 : temp2 > temp ? temp + 1 : temp2;
+			result = array[index] = temporary > result ? (temporary2 > result ? result + 1 : temporary2) : (temporary2 > temporary ? temporary + 1 : temporary2);
 		}
 	}
 
 	return result;
-};
-
-module.exports = leven;
-// TODO: Remove this for the next major release
-module.exports.default = leven;
+}

@@ -1,5 +1,5 @@
 import test from 'ava';
-import leven from '.';
+import leven from './index.js';
 
 test('main', t => {
 	t.is(leven('a', 'b'), 1);
