@@ -8,14 +8,25 @@
 $ npm install leven
 ```
 
+## Importing on Client
+
+```js
+import leven from "leven";
+```
+
+## Importing on Server(Node)
+
+```js
+let leven;
+leven = import("leven").then((v) => (leven = v.default));
+```
+
 ## Usage
 
 ```js
-import leven from 'leven';
-
-leven('cat', 'cow');
+leven("cat", "cow");
 //=> 2
-```
+ ```
 
 ## Related
 
