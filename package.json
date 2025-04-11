@@ -17,7 +17,7 @@
 	},
 	"scripts": {
 		"test": "xo && ava && tsd",
-		"bench": "matcha bench.js"
+		"bench": "node bench.js"
 	},
 	"files": [
 		"index.js",
@@ -50,9 +50,9 @@
 		"levenshtein": "^1.0.5",
 		"levenshtein-component": "^0.0.1",
 		"levenshtein-edit-distance": "^3.0.0",
-		"matcha": "^0.7.0",
 		"natural": "^5.0.4",
 		"talisman": "^1.1.4",
+		"tinybench": "^4.0.1",
 		"tsd": "^0.17.0",
 		"xo": "^0.44.0"
 	}
