@@ -65,7 +65,7 @@ export default function leven(first, second) {
 			temporary = array[index];
 			// eslint-disable-next-line no-multi-assign
 			result = array[index] = temporary > result
-				? (temporary2 > result ? result + 1: temporary2)
+				? (temporary2 > result ? result + 1 : temporary2)
 				: (temporary2 > temporary ? temporary + 1 : temporary2);
 		}
 	}
