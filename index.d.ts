@@ -4,6 +4,10 @@ export interface Options {
 
 	If the actual distance exceeds this value, the function will return the maximum distance instead of the actual distance. This can significantly improve performance when you only care about matches within a certain threshold.
 
+	Negative and non-integer values are ignored, and the distance is then not capped.
+
+	Without `maxDistance`, the time grows with the product of the string lengths, so two long strings can block for seconds. With it, the time grows only with the string length times `maxDistance`. Set it for untrusted input.
+
 	@example
 	```
 	import leven from 'leven';

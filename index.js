@@ -1,5 +1,9 @@
-const array = [];
-const characterCodeCache = [];
+// Buffers are reused between calls so the inner loop never allocates.
+let row = new Int32Array(0);
+let codes = new Uint16Array(0);
+
+// Releasing buffers above this size on the next call that needs them keeps a single huge comparison from holding on to its memory for the rest of the process.
+const maximumRetainedColumns = 2 ** 20;
 
 export default function leven(first, second, options) {
 	if (first === second) {
@@ -40,63 +44,103 @@ export default function leven(first, second, options) {
 	firstLength -= start;
 	secondLength -= start;
 
+	// A distance is a whole number, so a cap that is not a non-negative integer cannot bound the table and is ignored.
+	if (!Number.isInteger(maxDistance) || maxDistance < 0) {
+		return firstLength === 0 ? secondLength : fullDistance(first, second, start, firstLength, secondLength);
+	}
+
 	// Early termination after trimming: if difference in length exceeds max distance
-	if (maxDistance !== undefined && secondLength - firstLength > maxDistance) {
+	if (secondLength - firstLength > maxDistance) {
 		return maxDistance;
 	}
 
 	if (firstLength === 0) {
-		return maxDistance !== undefined && secondLength > maxDistance
-			? maxDistance
-			: secondLength;
+		return secondLength;
 	}
 
-	let bCharacterCode;
-	let result;
-	let temporary;
-	let temporary2;
-	let index = 0;
-	let index2 = 0;
+	return bandedDistance(first, second, start, firstLength, secondLength, maxDistance);
+}
 
-	while (index < firstLength) {
-		characterCodeCache[index] = first.charCodeAt(start + index);
-		array[index] = ++index;
+// Fills the character code cache and the first row, growing the buffers to fit.
+function prepare(first, start, firstLength) {
+	if (row.length < firstLength || row.length > maximumRetainedColumns) {
+		let capacity = 64;
+
+		while (capacity < firstLength) {
+			capacity *= 2;
+		}
+
+		row = new Int32Array(capacity);
+		codes = new Uint16Array(capacity);
 	}
 
-	while (index2 < secondLength) {
-		bCharacterCode = second.charCodeAt(start + index2);
-		temporary = index2++;
-		result = index2;
+	for (let index = 0; index < firstLength; index++) {
+		codes[index] = first.charCodeAt(start + index);
+		row[index] = index + 1;
+	}
+}
 
-		for (index = 0; index < firstLength; index++) {
-			temporary2 = bCharacterCode === characterCodeCache[index] ? temporary : temporary + 1;
-			temporary = array[index];
+function fullDistance(first, second, start, firstLength, secondLength) {
+	prepare(first, start, firstLength);
+
+	let current = 0;
+
+	for (let rowIndex = 0; rowIndex < secondLength; rowIndex++) {
+		const bCharacterCode = second.charCodeAt(start + rowIndex);
+		let temporary = rowIndex;
+		current = rowIndex + 1;
+
+		for (let index = 0; index < firstLength; index++) {
+			const substituted = bCharacterCode === codes[index] ? temporary : temporary + 1;
+			temporary = row[index];
 			// eslint-disable-next-line no-multi-assign
-			result = array[index] = temporary > result
-				? (temporary2 > result ? result + 1 : temporary2)
-				: (temporary2 > temporary ? temporary + 1 : temporary2);
+			current = row[index] = temporary > current
+				? (substituted > current ? current + 1 : substituted)
+				: (substituted > temporary ? temporary + 1 : substituted);
+		}
+	}
+
+	return current;
+}
+
+// Same dynamic programming table as `fullDistance`, but only the cells within `maxDistance` of the diagonal are computed. Every path that stays within the cap runs through that band, so the result is exact, and a row whose minimum rises above the cap rules out every path through it.
+function bandedDistance(first, second, start, firstLength, secondLength, maxDistance) {
+	prepare(first, start, firstLength);
+
+	// The smallest value a cell outside the band can hold. The cell entering the band on the right still holds its first row value from `prepare`, which is never smaller than this, so it needs no seeding.
+	const outside = maxDistance + 1;
+
+	for (let rowIndex = 0; rowIndex < secondLength; rowIndex++) {
+		const bCharacterCode = second.charCodeAt(start + rowIndex);
+		const low = Math.max(0, rowIndex - maxDistance);
+		const high = Math.min(firstLength - 1, rowIndex + maxDistance);
+
+		// The cell to the left of the band is also at least `maxDistance + 1`, while its diagonal is still inside the band. At the first column both are the plain prefix distances.
+		let temporary = low > 0 ? row[low - 1] : rowIndex;
+		let current = low > 0 ? outside : rowIndex + 1;
+		let rowMinimum = outside;
+
+		for (let index = low; index <= high; index++) {
+			const substituted = bCharacterCode === codes[index] ? temporary : temporary + 1;
+			temporary = row[index];
+			// eslint-disable-next-line no-multi-assign
+			current = row[index] = temporary > current
+				? (substituted > current ? current + 1 : substituted)
+				: (substituted > temporary ? temporary + 1 : substituted);
+
+			if (current < rowMinimum) {
+				rowMinimum = current;
+			}
 		}
 
 		// Early termination: if all values in current row exceed maxDistance
-		if (maxDistance !== undefined) {
-			let rowMinimum = result;
-			for (index = 0; index < firstLength; index++) {
-				if (array[index] < rowMinimum) {
-					rowMinimum = array[index];
-				}
-			}
-
-			if (rowMinimum > maxDistance) {
-				return maxDistance;
-			}
+		if (rowMinimum > maxDistance) {
+			return maxDistance;
 		}
 	}
 
-	// Bound arrays to avoid retaining large previous sizes
-	array.length = firstLength;
-	characterCodeCache.length = firstLength;
-
-	return maxDistance !== undefined && result > maxDistance ? maxDistance : result;
+	const distance = row[firstLength - 1];
+	return distance > maxDistance ? maxDistance : distance;
 }
 
 export function closestMatch(target, candidates, options) {
@@ -104,7 +148,7 @@ export function closestMatch(target, candidates, options) {
 		return undefined;
 	}
 
-	const userMax = options?.maxDistance;
+	const maxDistance = options?.maxDistance;
 	const targetLength = target.length;
 
 	// Exact match fast-path
@@ -114,12 +158,13 @@ export function closestMatch(target, candidates, options) {
 		}
 	}
 
-	if (userMax === 0) {
+	if (maxDistance === 0) {
 		return undefined;
 	}
 
 	let best;
-	let bestDist = Number.POSITIVE_INFINITY;
+	// Starting one above the caller's limit means a candidate must be within the limit to win. It also serves as the cap for `leven`, so every distance below it is exact and no call ever has to be repeated.
+	let bestDist = Number.isInteger(maxDistance) && maxDistance > 0 ? maxDistance + 1 : Number.POSITIVE_INFINITY;
 	const seen = new Set();
 
 	for (const candidate of candidates) {
@@ -134,41 +179,14 @@ export function closestMatch(target, candidates, options) {
 			continue;
 		}
 
-		if (userMax !== undefined && lengthDiff > userMax) {
-			continue;
-		}
-
-		const cap = Number.isFinite(bestDist)
-			? (userMax === undefined ? bestDist : Math.min(bestDist, userMax))
-			: userMax;
-
-		const distance = cap === undefined
+		const distance = bestDist === Number.POSITIVE_INFINITY
 			? leven(target, candidate)
-			: leven(target, candidate, {maxDistance: cap});
+			: leven(target, candidate, {maxDistance: bestDist});
 
-		// Skip candidates that exceed the user's maximum distance
-		if (userMax !== undefined && distance > userMax) {
-			continue;
-		}
-
-		// If we got a capped result that equals the cap, we need the actual distance
-		// for accurate comparison, but only if the cap was due to userMax
-		let actualD = distance;
-		if (cap !== undefined && distance === cap && cap === userMax) {
-			actualD = leven(target, candidate);
-		}
-
-		if (actualD < bestDist) {
-			bestDist = actualD;
+		if (distance < bestDist) {
+			bestDist = distance;
 			best = candidate;
-			if (bestDist === 0) {
-				break;
-			}
 		}
-	}
-
-	if (userMax !== undefined && bestDist > userMax) {
-		return undefined;
 	}
 
 	return best;

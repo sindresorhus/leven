@@ -53,11 +53,107 @@ test('maxDistance option', t => {
 	t.is(leven('foo', 'bar', null), 3);
 });
 
+// A plain dynamic programming table, so the banded table can be checked against something that does not share its logic.
+const referenceDistance = (first, second) => {
+	const table = Array.from({length: first.length + 1}, () => Array(second.length + 1).fill(0));
+
+	for (let index = 0; index <= first.length; index++) {
+		table[index][0] = index;
+	}
+
+	for (let index = 0; index <= second.length; index++) {
+		table[0][index] = index;
+	}
+
+	for (let i = 1; i <= first.length; i++) {
+		for (let j = 1; j <= second.length; j++) {
+			const substitution = first[i - 1] === second[j - 1] ? 0 : 1;
+			table[i][j] = Math.min(
+				table[i - 1][j] + 1,
+				table[i][j - 1] + 1,
+				table[i - 1][j - 1] + substitution,
+			);
+		}
+	}
+
+	return table[first.length][second.length];
+};
+
+test('every length combination agrees with a full distance table', t => {
+	const alphabet = 'abc';
+	let seed = 1;
+	const word = length => {
+		let result = '';
+		for (let index = 0; index < length; index++) {
+			seed = (seed * 1103515245 + 12345) & 0x7FFFFF;
+			result += alphabet[seed % alphabet.length];
+		}
+
+		return result;
+	};
+
+	for (let firstLength = 0; firstLength <= 8; firstLength++) {
+		for (let secondLength = 0; secondLength <= 8; secondLength++) {
+			seed = firstLength * 37 + secondLength + 1;
+			const first = word(firstLength);
+			seed = firstLength * 91 + secondLength + 5;
+			const second = word(secondLength);
+
+			const distance = referenceDistance(first, second);
+			const label = `${JSON.stringify(first)} / ${JSON.stringify(second)}`;
+
+			t.is(leven(first, second), distance, label);
+
+			// Every cap below the real distance must return the cap, and every cap from the real distance upwards must return that distance.
+			for (let maxDistance = 0; maxDistance <= distance + 2; maxDistance++) {
+				t.is(leven(first, second, {maxDistance}), Math.min(distance, maxDistance), `${label} with maxDistance ${maxDistance}`);
+			}
+		}
+	}
+});
+
+test('strings longer than the initial buffer', t => {
+	// The buffers are reused and start out small, so check strings long enough to grow them, then shorter ones to check the grown buffers are reused. The shared text is shifted, so a wrong first row or character code past the initial size changes the result.
+	const text = 'the quick brown fox jumps over the lazy dog';
+
+	for (const padding of [150, 80]) {
+		const first = 'x'.repeat(padding) + text;
+		const second = text + 'y'.repeat(padding);
+		const distance = referenceDistance(first, second);
+
+		t.is(leven(first, second), distance);
+		t.is(leven(first, second, {maxDistance: 5}), 5);
+		t.is(leven(first, second, {maxDistance: distance}), distance);
+	}
+
+	t.is(leven('kitten', 'sitting'), 3);
+	t.is(leven('kitten', 'sitting', {maxDistance: 2}), 2);
+});
+
+test('buffers grown past the retained size still give correct results afterwards', t => {
+	// Only the band is computed, so this is cheap, but the buffers still grow to fit the whole string. Doubling from 64 lands exactly on `2 ** 20`, so the length has to be above it.
+	const length = (2 ** 20) + 1;
+	t.is(leven('a'.repeat(length), 'b'.repeat(length), {maxDistance: 1}), 1);
+
+	t.is(leven('kitten', 'sitting'), 3);
+	t.is(leven('kitten', 'sitting', {maxDistance: 2}), 2);
+});
+
+test('a maxDistance that cannot bound a distance is ignored', t => {
+	t.is(leven('kitten', 'sitting', {maxDistance: Number.NaN}), 3);
+	t.is(leven('kitten', 'sitting', {maxDistance: 2.5}), 3);
+	t.is(leven('kitten', 'sitting', {maxDistance: -1}), 3);
+	t.is(leven('kitten', 'sitting', {maxDistance: Number.POSITIVE_INFINITY}), 3);
+
+	t.is(closestMatch('kitten', ['sitting', 'kitchen', 'mittens'], {maxDistance: Number.NaN}), 'kitchen');
+	t.is(closestMatch('kitten', ['sitting', 'kitchen', 'mittens'], {maxDistance: 2.5}), 'kitchen');
+	t.is(closestMatch('kitten', ['sitting', 'kitchen', 'mittens'], {maxDistance: -1}), 'kitchen');
+});
+
 test('closestMatch', t => {
 	// Basic functionality
-	// Note: With optimization, tie-breaking may not always prefer first in input order
-	const result = closestMatch('kitten', ['sitting', 'kitchen', 'mittens']);
-	t.true(['kitchen', 'mittens'].includes(result)); // Either is correct (both distance 2)
+	// 'kitchen' and 'mittens' are both 2 away, so the first in input order wins
+	t.is(closestMatch('kitten', ['sitting', 'kitchen', 'mittens']), 'kitchen');
 	t.is(closestMatch('hello', ['jello', 'yellow', 'bellow']), 'jello');
 
 	// With exact match
@@ -139,4 +235,12 @@ test('closestMatch', t => {
 
 	// Additional maxDistance edge case
 	t.is(closestMatch('test', ['testing'], {maxDistance: 0}), undefined); // No exact match
+
+	// A candidate sitting exactly on the limit still counts as a match
+	t.is(closestMatch('abc', ['xyz', 'abd'], {maxDistance: 1}), 'abd');
+	t.is(closestMatch('abc', ['abd', 'abe'], {maxDistance: 1}), 'abd');
+	t.is(closestMatch('abc', ['xyz', 'abd'], {maxDistance: 0}), undefined);
+
+	// A later candidate that is strictly closer still wins over one already within the limit
+	t.is(closestMatch('abcd', ['abxy', 'abcx'], {maxDistance: 2}), 'abcx');
 });
