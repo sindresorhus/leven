@@ -45,7 +45,7 @@ export default function leven(first, second, options) {
 	secondLength -= start;
 
 	// A distance is a whole number, so a cap that is not a non-negative integer cannot bound the table and is ignored.
-	if (!Number.isInteger(maxDistance) || maxDistance < 0) {
+	if (!Number.isSafeInteger(maxDistance) || maxDistance < 0) {
 		return firstLength === 0 ? secondLength : fullDistance(first, second, start, firstLength, secondLength);
 	}
 
@@ -54,11 +54,7 @@ export default function leven(first, second, options) {
 		return maxDistance;
 	}
 
-	if (firstLength === 0) {
-		return secondLength;
-	}
-
-	return bandedDistance(first, second, start, firstLength, secondLength, maxDistance);
+	return firstLength === 0 ? secondLength : bandedDistance(first, second, start, firstLength, secondLength, maxDistance);
 }
 
 // Fills the character code cache and the first row, growing the buffers to fit.
@@ -140,7 +136,7 @@ function bandedDistance(first, second, start, firstLength, secondLength, maxDist
 	}
 
 	const distance = row[firstLength - 1];
-	return distance > maxDistance ? maxDistance : distance;
+	return Math.min(distance, maxDistance);
 }
 
 export function closestMatch(target, candidates, options) {
@@ -164,7 +160,7 @@ export function closestMatch(target, candidates, options) {
 
 	let best;
 	// Starting one above the caller's limit means a candidate must be within the limit to win. It also serves as the cap for `leven`, so every distance below it is exact and no call ever has to be repeated.
-	let bestDist = Number.isInteger(maxDistance) && maxDistance > 0 ? maxDistance + 1 : Number.POSITIVE_INFINITY;
+	let bestDist = Number.isSafeInteger(maxDistance) && maxDistance > 0 ? maxDistance + 1 : Infinity;
 	const seen = new Set();
 
 	for (const candidate of candidates) {
@@ -179,14 +175,16 @@ export function closestMatch(target, candidates, options) {
 			continue;
 		}
 
-		const distance = bestDist === Number.POSITIVE_INFINITY
+		const distance = bestDist === Infinity
 			? leven(target, candidate)
 			: leven(target, candidate, {maxDistance: bestDist});
 
-		if (distance < bestDist) {
-			bestDist = distance;
-			best = candidate;
+		if (distance >= bestDist) {
+			continue;
 		}
+
+		bestDist = distance;
+		best = candidate;
 	}
 
 	return best;

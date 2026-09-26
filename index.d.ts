@@ -1,4 +1,4 @@
-export interface Options {
+export type Options = {
 	/**
 	Maximum Levenshtein distance to calculate.
 
@@ -20,14 +20,13 @@ export interface Options {
 	```
 	*/
 	readonly maxDistance?: number;
-}
+};
 
 /**
 Measure the difference between two strings using the Levenshtein distance algorithm.
 
 @param first - First string.
 @param second - Second string.
-@param options - Options.
 @returns Distance between `first` and `second`. If `maxDistance` is provided and the actual distance exceeds it, returns `maxDistance`.
 
 @example
@@ -45,7 +44,6 @@ Find the closest matching string from an array of candidates.
 
 @param target - The string to find matches for.
 @param candidates - Array of candidate strings to search through.
-@param options - Options.
 @returns The closest matching string from candidates, or `undefined` if no candidates are provided or if no match is found within `maxDistance`.
 
 @example
